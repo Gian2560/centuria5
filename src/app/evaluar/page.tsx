@@ -163,14 +163,13 @@ export default function FeedbackPage() {
         pdf.setTextColor(white[0], white[1], white[2]);
         pdf.setFontSize(16);
         pdf.setFont('helvetica', 'bold');
-        pdf.text('PONTIFICIA UNIVERSIDAD CATÓLICA DEL PERÚ', margin + 30, 15);
-        
+        pdf.text(`Retroalimentación ${course}`, margin + 30, 15);
+
         // Subtítulo elegante con más estilo
         pdf.setFontSize(11);
         pdf.setFont('helvetica', 'normal');
         pdf.setTextColor(240, 240, 240);
-        pdf.text('Sistema de Evaluación Académica', margin + 30, 20);
-        
+        pdf.text(`Laboratorio ${labNumber}`, margin + 30, 20);          
         // Línea decorativa horizontal bajo el título
         pdf.setDrawColor(255, 255, 255);
         pdf.setLineWidth(0.5);
@@ -222,12 +221,12 @@ export default function FeedbackPage() {
       pdf.setFontSize(15);
       pdf.setTextColor(pucpDarkBlue[0], pucpDarkBlue[1], pucpDarkBlue[2]);
       pdf.setFont('helvetica', 'bold');
-      pdf.text('INFORMACIÓN DEL ESTUDIANTE', margin + 5, currentY);
+      pdf.text('Información del Estudiante', margin + 5, currentY);
       
       // Línea decorativa bajo el título
-      pdf.setDrawColor(pucpSkyBlue[0], pucpSkyBlue[1], pucpSkyBlue[2]);
-      pdf.setLineWidth(0.5);
-      pdf.line(margin + 5, currentY + 1, margin + 65, currentY + 1);
+      pdf.setDrawColor(pucpBlue[0], pucpBlue[1], pucpBlue[2]);
+      pdf.setLineWidth(1);
+      pdf.line(margin+5, currentY + 2, margin + 90, currentY + 2);
       
       currentY += 10;
       
@@ -279,7 +278,7 @@ export default function FeedbackPage() {
       pdf.setFontSize(15);
       pdf.setFont('helvetica', 'bold');
       pdf.setTextColor(pucpDarkBlue[0], pucpDarkBlue[1], pucpDarkBlue[2]);
-      pdf.text('EVALUACIÓN DETALLADA', margin, currentY);
+      pdf.text('Detalle', margin, currentY);
       
       // Línea decorativa bajo el título más prominente
       pdf.setDrawColor(pucpBlue[0], pucpBlue[1], pucpBlue[2]);
