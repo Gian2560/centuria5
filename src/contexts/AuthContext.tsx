@@ -25,8 +25,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = (username: string, password: string): boolean => {
     // Credenciales hardcodeadas (en producción deberían venir del servidor)
-    const validUser = "admin";
-    const validPass = "pucp2024";
+    const validUser = process.env.NEXT_PUBLIC_AUTH_USER;
+    const validPass = process.env.NEXT_PUBLIC_AUTH_PASS;
     
     if (username === validUser && password === validPass) {
       setIsAuthenticated(true);
