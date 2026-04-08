@@ -470,7 +470,7 @@ export default function FeedbackPage() {
       });
 
       // PUNTAJE TOTAL - Diseño discreto pero notorio
-      checkPageBreak(25);
+      checkPageBreak(40); // Incrementado para asegurar más espacio libre abajo
       
       currentY += 10;
       
@@ -481,7 +481,7 @@ export default function FeedbackPage() {
       currentY += 10;
 
       // Caja del puntaje total más mesurada (lado derecho de preferencia)
-      const boxWidth = usableWidth * 0.45;
+      const boxWidth = usableWidth * 0.50; // un poco más ancho
       const boxX = margin + usableWidth - boxWidth;
       const boxHeight = 22;
       const boxY = currentY;
@@ -519,11 +519,8 @@ export default function FeedbackPage() {
       
       pdf.text(scoreText, boxX + boxWidth - 10, boxY + 14.5, { align: 'right' });
 
-      // Texto de agradecimiento del otro lado
-      pdf.setFontSize(10);
-      pdf.setTextColor(mediumGray[0], mediumGray[1], mediumGray[2]);
-      pdf.setFont('helvetica', 'italic');
-      pdf.text('                                       ', margin + 5, boxY + 14);
+      // Avanzamos currentY
+      currentY += boxHeight + 10;
 
       // Función para agregar footer elegante con múltiples páginas
       const addFooters = () => {
