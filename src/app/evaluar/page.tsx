@@ -29,6 +29,17 @@ export default function FeedbackPage() {
     { name: "", subItems: [{ name: "", score: "", max: "", obs: "" }] },
   ]);
 
+  const STUDENT_LIST = [
+    { code: "20220343", fullname: "CULQUI TRUJILLO, NEILL ROBERT" },
+    { code: "20220625", fullname: "UNDA VIVANCO, ADRIAN ANDRE" },
+    { code: "20221277", fullname: "ALVAREZ ROSAS, BELEN LUCIA" },
+    { code: "20221402", fullname: "CHECA MEZA, GABRIELA LUCIA" },
+    { code: "20221762", fullname: "ALANIA NOVOA, ARIAN ALFONSO" },
+    { code: "20222299", fullname: "JANAMPA FLORES, DAFNE YANOA" },
+    { code: "20222626", fullname: "MOYA ESTRADA, HECTOR ISMAEL" },
+    { code: "20222757", fullname: "LLAIQUI ROJAS, ARIEL JAIR" }
+  ];
+
   const handleLogout = () => {
     logout();
     router.push('/');
@@ -193,97 +204,107 @@ export default function FeedbackPage() {
       // Header inicial
       addHeader();
 
-      // INFORMACIÓN DEL ESTUDIANTE - Diseño compacto y bien espaciado
-      const studentBoxHeight = 45;
+      // INFORMACIÓN DEL ESTUDIANTE - Diseño compacto y estructurado
+      const studentBoxHeight = 36; // Más pequeño
       
       // Sombra suave para profundidad
       pdf.setFillColor(200, 200, 200);
       pdf.rect(margin + 1, currentY + 1, usableWidth, studentBoxHeight, 'F');
       
-      // Caja principal elegante
+      // Caja principal
       pdf.setFillColor(white[0], white[1], white[2]);
       pdf.setDrawColor(pucpAccentBlue[0], pucpAccentBlue[1], pucpAccentBlue[2]);
       pdf.setLineWidth(1);
       pdf.rect(margin, currentY, usableWidth, studentBoxHeight, 'FD');
       
-      // Barra superior azul elegante
+      // Barra superior
       pdf.setFillColor(pucpBlue[0], pucpBlue[1], pucpBlue[2]);
       pdf.rect(margin, currentY, usableWidth, 4, 'F');
       
-      // Línea decorativa fina bajo la barra
+      // Línea decorativa
       pdf.setDrawColor(pucpSkyBlue[0], pucpSkyBlue[1], pucpSkyBlue[2]);
       pdf.setLineWidth(0.3);
       pdf.line(margin, currentY + 4, pageWidth - margin, currentY + 4);
       
-      currentY += 12;
+      currentY += 10;
       
-      // Título de sección compacto pero visible
-      pdf.setFontSize(15);
+      // Título de sección más pequeño
+      pdf.setFontSize(12);
       pdf.setTextColor(pucpDarkBlue[0], pucpDarkBlue[1], pucpDarkBlue[2]);
       pdf.setFont('helvetica', 'bold');
       pdf.text('Información del Estudiante', margin + 5, currentY);
       
       // Línea decorativa bajo el título
       pdf.setDrawColor(pucpBlue[0], pucpBlue[1], pucpBlue[2]);
-      pdf.setLineWidth(1);
-      pdf.line(margin+5, currentY + 2, margin + 90, currentY + 2);
+      pdf.setLineWidth(0.5);
+      pdf.line(margin + 5, currentY + 2, margin + 60, currentY + 2);
       
-      currentY += 10;
+      currentY += 8;
       
-      // Grid de información bien separado y organizado
-      const colWidth = usableWidth / 3;
-      pdf.setFontSize(11);
+      // Distribución exacta para evitar superposiciones (Col 1: ~25%, Col 2: ~45%, Col 3: ~30%)
+      const col1X = margin + 5;
+      const col2X = margin + (usableWidth * 0.25);
+      const col3X = margin + (usableWidth * 0.70);
+      
+      pdf.setFontSize(9);
       pdf.setFont('helvetica', 'bold');
       pdf.setTextColor(elegantGray[0], elegantGray[1], elegantGray[2]);
       
       // Primera fila - Etiquetas
-      pdf.text('Código:', margin + 5, currentY);
-      pdf.text('Nombre Completo:', margin + colWidth, currentY);
-      pdf.text('Curso:', margin + colWidth * 2, currentY);
+      pdf.text('Código:', col1X, currentY);
+      pdf.text('Nombre Completo:', col2X, currentY);
+      pdf.text('Curso:', col3X, currentY);
       
-      currentY += 5;
+      currentY += 4;
       
       // Primera fila - Valores
       pdf.setFont('helvetica', 'normal');
       pdf.setTextColor(pucpBlue[0], pucpBlue[1], pucpBlue[2]);
-      pdf.setFontSize(11);
-      pdf.text(student.code || 'N/A', margin + 5, currentY);
-      const fullName = `${student.name || ''} ${student.lastname || ''}`.trim() || 'N/A';
-      pdf.text(fullName, margin + colWidth, currentY);
-      pdf.text(course || 'N/A', margin + colWidth * 2, currentY);
+      pdf.setFontSize(10);
+      pdf.text(student.code || 'N/A', col1X, currentY);
       
-      currentY += 8;
+      const fullName = `${student.name || ''} ${student.lastname || ''}`.trim() || 'N/A';
+      // Truncar un poco el nombre si es inmenso para que no pise nada
+      const splitName = pdf.splitTextToSize(fullName, (usableWidth * 0.45) - 5);
+      pdf.text(splitName[0], col2X, currentY);
+      
+      pdf.text(course || 'N/A', col3X, currentY);
+      
+      currentY += 7;
       
       // Segunda fila - Etiquetas
       pdf.setFont('helvetica', 'bold');
       pdf.setTextColor(elegantGray[0], elegantGray[1], elegantGray[2]);
-      pdf.setFontSize(11);
-      pdf.text('Laboratorio:', margin + 5, currentY);
-      pdf.text('Jefe de Práctica:', margin + colWidth, currentY);
-      pdf.text('Email:', margin + colWidth * 2, currentY);
+      pdf.setFontSize(9);
+      pdf.text('Laboratorio:', col1X, currentY);
+      pdf.text('Jefe de Práctica:', col2X, currentY);
+      pdf.text('Email:', col3X, currentY);
       
-      currentY += 5;
+      currentY += 4;
       
       // Segunda fila - Valores
       pdf.setFont('helvetica', 'normal');
       pdf.setTextColor(pucpBlue[0], pucpBlue[1], pucpBlue[2]);
-      pdf.setFontSize(11);
-      pdf.text(`Lab ${labNumber}` || 'N/A', margin + 5, currentY);
-      pdf.text(reviewer.name || 'N/A', margin + colWidth, currentY);
-      pdf.text(reviewer.email || 'N/A', margin + colWidth * 2, currentY);
+      pdf.setFontSize(10);
+      pdf.text(`Lab ${labNumber}` || 'N/A', col1X, currentY);
       
-      currentY += 20;
+      const reviewerName = pdf.splitTextToSize(reviewer.name || 'N/A', (usableWidth * 0.45) - 5);
+      pdf.text(reviewerName[0], col2X, currentY);
+      
+      pdf.text(reviewer.email || 'N/A', col3X, currentY);
+      
+      currentY += 15;
 
-      // EVALUACIÓN DETALLADA - Título protagonista bien separado
-      pdf.setFontSize(15);
+      // EVALUACIÓN DETALLADA - Más llamativo
+      pdf.setFontSize(16);
       pdf.setFont('helvetica', 'bold');
       pdf.setTextColor(pucpDarkBlue[0], pucpDarkBlue[1], pucpDarkBlue[2]);
-      pdf.text('Detalle', margin, currentY);
+      pdf.text('Detalle de Retroalimentación', margin, currentY);
       
-      // Línea decorativa bajo el título más prominente
-      pdf.setDrawColor(pucpBlue[0], pucpBlue[1], pucpBlue[2]);
-      pdf.setLineWidth(1);
-      pdf.line(margin, currentY + 2, margin + 90, currentY + 2);
+      // Línea decorativa
+      pdf.setDrawColor(pucpAccentBlue[0], pucpAccentBlue[1], pucpAccentBlue[2]);
+      pdf.setLineWidth(1.5);
+      pdf.line(margin, currentY + 2, margin + 100, currentY + 2);
       
       currentY += 10;
 
@@ -291,58 +312,15 @@ export default function FeedbackPage() {
       let totalObtained = 0;
       let totalMaximum = 0;
 
-      items.forEach((item) => {
-        checkPageBreak(35);
+      const colWidths = [usableWidth * 0.42, usableWidth * 0.15, usableWidth * 0.15, usableWidth * 0.28];
+      const tableHeaders = ['CRITERIO DE EVALUACIÓN', 'OBTENIDO', 'MÁXIMO', 'OBSERVACIONES'];
 
-        // Contenedor de pregunta ultra elegante
-        const questionHeight = 10 + (item.subItems.length * 7) + 15;
-        
-        // Sombra con más profundidad
-        pdf.setFillColor(180, 180, 180);
-        pdf.rect(margin + 2, currentY + 2, usableWidth, questionHeight, 'F');
-        
-        // Fondo principal con borde elegante
-        pdf.setFillColor(255, 255, 255);
-        pdf.setDrawColor(pucpBlue[0], pucpBlue[1], pucpBlue[2]);
-        pdf.setLineWidth(0.5);
-        pdf.rect(margin, currentY, usableWidth, questionHeight, 'FD');
-        
-        // Header de pregunta con gradiente mejorado
-        pdf.setFillColor(pucpLightBlue[0], pucpLightBlue[1], pucpLightBlue[2]);
-        pdf.rect(margin, currentY, usableWidth, 10, 'F');
-        
-        // Número de pregunta ultra elegante con círculo más grande
-        pdf.setFillColor(pucpBlue[0], pucpBlue[1], pucpBlue[2]);
-        pdf.circle(margin + 10, currentY + 5, 4, 'F');
-        
-        // Borde del círculo
-        pdf.setDrawColor(pucpDarkBlue[0], pucpDarkBlue[1], pucpDarkBlue[2]);
-        pdf.setLineWidth(0.3);
-        pdf.circle(margin + 10, currentY + 5, 4, 'S');
-        
-        pdf.setFontSize(11);
-        pdf.setTextColor(255, 255, 255);
-        pdf.setFont('helvetica', 'bold');
-        pdf.text(questionNumber.toString(), margin + 10, currentY + 6.5, { align: 'center' });
-        
-        // Título de pregunta con mejor tipografía
-        pdf.setTextColor(pucpDarkBlue[0], pucpDarkBlue[1], pucpDarkBlue[2]);
-        pdf.setFontSize(12);
-        pdf.setFont('helvetica', 'bold');
-        const questionTitle = item.name || `Pregunta ${questionNumber}`;
-        pdf.text(questionTitle, margin + 20, currentY + 6.5);
-        
-        currentY += 10;
-
-        // Tabla elegante con header mejorado y más espaciado
-        const colWidths = [usableWidth * 0.42, usableWidth * 0.15, usableWidth * 0.15, usableWidth * 0.28];
-        const tableHeaders = ['CRITERIO DE EVALUACIÓN', 'OBTENIDO', 'MÁXIMO', 'OBSERVACIONES'];
-
+      // Función para dibujar header de tabla
+      const drawTableHeader = () => {
         // Header de tabla con estilo premium
         pdf.setFillColor(pucpDarkBlue[0], pucpDarkBlue[1], pucpDarkBlue[2]);
         pdf.rect(margin, currentY, usableWidth, 7, 'F');
         
-        // Línea decorativa en el header con azul elegante
         pdf.setDrawColor(pucpSkyBlue[0], pucpSkyBlue[1], pucpSkyBlue[2]);
         pdf.setLineWidth(0.5);
         pdf.line(margin, currentY, pageWidth - margin, currentY);
@@ -354,37 +332,90 @@ export default function FeedbackPage() {
         let xPos = margin + 3;
         tableHeaders.forEach((header, i) => {
           if (i === 1 || i === 2) {
-            // Centrar las columnas de puntajes
             pdf.text(header, xPos + (colWidths[i] / 2), currentY + 4.5, { align: 'center' });
           } else {
-            // Alinear a la izquierda las otras columnas
             pdf.text(header, xPos, currentY + 4.5);
           }
           xPos += colWidths[i];
         });
-        
         currentY += 7;
+      };
 
-        // Filas de datos con observaciones completas y altura dinámica
+      items.forEach((item) => {
+        checkPageBreak(30);
+
+        // Header de la pregunta
+        const questionHeight = 10;
+        
+        // Fondo principal con borde elegante
+        pdf.setFillColor(white[0], white[1], white[2]);
+        pdf.setDrawColor(pucpBlue[0], pucpBlue[1], pucpBlue[2]);
+        pdf.setLineWidth(0.5);
+        pdf.rect(margin, currentY, usableWidth, questionHeight, 'FD');
+        
+        // Fill gradient
+        pdf.setFillColor(pucpLightBlue[0], pucpLightBlue[1], pucpLightBlue[2]);
+        pdf.rect(margin, currentY, usableWidth, questionHeight, 'F');
+        
+        // Número de pregunta
+        pdf.setFillColor(pucpBlue[0], pucpBlue[1], pucpBlue[2]);
+        pdf.circle(margin + 10, currentY + 5, 4, 'F');
+        
+        pdf.setDrawColor(pucpDarkBlue[0], pucpDarkBlue[1], pucpDarkBlue[2]);
+        pdf.setLineWidth(0.3);
+        pdf.circle(margin + 10, currentY + 5, 4, 'S');
+        
+        pdf.setFontSize(11);
+        pdf.setTextColor(255, 255, 255);
+        pdf.setFont('helvetica', 'bold');
+        pdf.text(questionNumber.toString(), margin + 10, currentY + 6.5, { align: 'center' });
+        
+        // Título de pregunta
+        pdf.setTextColor(pucpDarkBlue[0], pucpDarkBlue[1], pucpDarkBlue[2]);
+        pdf.setFontSize(12);
+        pdf.setFont('helvetica', 'bold');
+        const questionTitle = item.name || `Pregunta ${questionNumber}`;
+        pdf.text(questionTitle, margin + 20, currentY + 6.5);
+        
+        currentY += 10;
+
+        drawTableHeader();
+
+        // Filas de datos
         item.subItems.forEach((subItem, subIndex) => {
           const obs = subItem.obs || 'Ninguna';
           
-          // Calcular altura dinámica basada en observaciones
-          const obsMaxWidth = colWidths[3] - 8; // Ancho disponible para observaciones
+          pdf.setFontSize(7);
+          pdf.setFont('helvetica', 'italic');
+          const obsMaxWidth = colWidths[3] - 8;
           const obsLines = pdf.splitTextToSize(obs, obsMaxWidth);
+          
+          pdf.setFontSize(8);
+          pdf.setFont('helvetica', 'normal');
           const itemName = subItem.name || `Ítem ${subIndex + 1}`;
           const itemLines = pdf.splitTextToSize(`• ${itemName}`, colWidths[0] - 8);
           
           const maxLines = Math.max(obsLines.length, itemLines.length, 1);
-          const rowHeight = Math.max(7, maxLines * 3.5 + 4); // Altura dinámica
+          const rowHeight = Math.max(7, maxLines * 3.5 + 4);
+
+          // Si el item excede la altura de página, saltamos e imprimimos header
+          if (currentY + rowHeight > pageHeight - margin - 15) {
+            pdf.addPage();
+            currentY = margin;
+            addHeader();
+            drawTableHeader();
+          }
           
-          // Fondo alternado elegante con altura dinámica
+          // Fondo alternado
           if (subIndex % 2 === 0) {
             pdf.setFillColor(lightGray[0], lightGray[1], lightGray[2]);
             pdf.rect(margin, currentY, usableWidth, rowHeight, 'F');
+          } else {
+            pdf.setFillColor(white[0], white[1], white[2]);
+            pdf.rect(margin, currentY, usableWidth, rowHeight, 'F');
           }
           
-          // Bordes sutiles pero visibles
+          // Bordes iterativos
           pdf.setDrawColor(220, 226, 235);
           pdf.setLineWidth(0.2);
           pdf.rect(margin, currentY, usableWidth, rowHeight, 'S');
@@ -393,31 +424,31 @@ export default function FeedbackPage() {
           pdf.setTextColor(elegantGray[0], elegantGray[1], elegantGray[2]);
           pdf.setFont('helvetica', 'normal');
           
-          xPos = margin + 3;
+          let xPos = margin + 3;
           
-          // Nombre del ítem con salto de línea automático
+          // Nombre del ítem
           let lineY = currentY + 3;
           itemLines.forEach((line: string, lineIndex: number) => {
             pdf.text(line, xPos, lineY + (lineIndex * 3.5));
           });
           xPos += colWidths[0];
           
-          // Puntaje obtenido centrado perfectamente
+          // Puntaje obtenido
           pdf.setFont('helvetica', 'bold');
           pdf.setTextColor(successBlue[0], successBlue[1], successBlue[2]);
           const obtainedScore = parseFloat(subItem.score || '0');
           const obtainedText = obtainedScore.toFixed(1);
-          pdf.text(obtainedText, xPos + (colWidths[1] / 2), currentY + (rowHeight / 2), { align: 'center' });
+          pdf.text(obtainedText, xPos + (colWidths[1] / 2), currentY + (rowHeight / 2) + 1, { align: 'center' });
           xPos += colWidths[1];
           
-          // Puntaje máximo centrado perfectamente
+          // Puntaje máximo
           pdf.setTextColor(pucpBlue[0], pucpBlue[1], pucpBlue[2]);
           const maxScore = parseFloat(subItem.max || '0');
           const maxText = maxScore.toFixed(1);
-          pdf.text(maxText, xPos + (colWidths[2] / 2), currentY + (rowHeight / 2), { align: 'center' });
+          pdf.text(maxText, xPos + (colWidths[2] / 2), currentY + (rowHeight / 2) + 1, { align: 'center' });
           xPos += colWidths[2];
           
-          // Observaciones completas con salto de línea automático
+          // Observaciones completas
           pdf.setFont('helvetica', 'italic');
           pdf.setTextColor(mediumGray[0], mediumGray[1], mediumGray[2]);
           pdf.setFontSize(7);
@@ -438,122 +469,100 @@ export default function FeedbackPage() {
         questionNumber++;
       });
 
-      // PUNTAJE TOTAL - Diseño espectacular al final
-      checkPageBreak(35);
+      // PUNTAJE TOTAL - Diseño discreto pero notorio
+      checkPageBreak(25);
       
-      currentY += 20;
+      currentY += 10;
       
-      // Separador elegante con azul
-      pdf.setDrawColor(pucpBlue[0], pucpBlue[1], pucpBlue[2]);
-      pdf.setLineWidth(2);
+      // Separador
+      pdf.setDrawColor(pucpLightBlue[0], pucpLightBlue[1], pucpLightBlue[2]);
+      pdf.setLineWidth(1);
       pdf.line(margin, currentY, pageWidth - margin, currentY);
       currentY += 10;
 
-      // Título del resumen con estilo premium
-      pdf.setFontSize(18);
-      pdf.setTextColor(pucpBlue[0], pucpBlue[1], pucpBlue[2]);
-      pdf.setFont('helvetica', 'bold');
-      pdf.text('Nota Final', pageWidth / 2, currentY, { align: 'center' });
-      currentY += 5;
-
-      // Caja del puntaje total ultra elegante
-      const boxHeight = 30;
+      // Caja del puntaje total más mesurada (lado derecho de preferencia)
+      const boxWidth = usableWidth * 0.45;
+      const boxX = margin + usableWidth - boxWidth;
+      const boxHeight = 22;
       const boxY = currentY;
       
-      // Sombra profunda
-      pdf.setFillColor(180, 180, 180);
-      pdf.rect(margin + 3, boxY + 3, usableWidth, boxHeight, 'F');
+      // Sombra
+      pdf.setFillColor(220, 220, 220);
+      pdf.rect(boxX + 1, boxY + 1, boxWidth, boxHeight, 'F');
       
-      // Fondo principal con gradiente
-      pdf.setFillColor(pucpLightBlue[0], pucpLightBlue[1], pucpLightBlue[2]);
-      pdf.rect(margin, boxY, usableWidth, boxHeight, 'F');
-      
-      // Borde elegante doble
+      // Caja
+      pdf.setFillColor(white[0], white[1], white[2]);
       pdf.setDrawColor(pucpBlue[0], pucpBlue[1], pucpBlue[2]);
-      pdf.setLineWidth(1.5);
-      pdf.rect(margin, boxY, usableWidth, boxHeight, 'S');
+      pdf.setLineWidth(0.5);
+      pdf.rect(boxX, boxY, boxWidth, boxHeight, 'FD');
       
-      // Barra superior azul elegante
+      pdf.setFillColor(pucpLightBlue[0], pucpLightBlue[1], pucpLightBlue[2]);
+      pdf.rect(boxX, boxY, boxWidth, boxHeight, 'F');
+      
+      // Borde izquierdo remarcado
       pdf.setFillColor(pucpBlue[0], pucpBlue[1], pucpBlue[2]);
-      pdf.rect(margin, boxY, usableWidth, 4, 'F');
+      pdf.rect(boxX, boxY, 3, boxHeight, 'F');
 
-      // Puntaje principal ultra elegante
-      pdf.setFontSize(18);
+      pdf.setFontSize(12);
       pdf.setTextColor(pucpDarkBlue[0], pucpDarkBlue[1], pucpDarkBlue[2]);
       pdf.setFont('helvetica', 'bold');
-      const scoreText = `${totalObtained.toFixed(1)} / ${totalMaximum.toFixed(1)}`;
-      pdf.text(scoreText, margin + 30, boxY + 18);
+      pdf.text('NOTA FINAL:', boxX + 10, boxY + 14);
 
-      // Porcentaje con colores azules dinámicos
-      const percentage = totalMaximum > 0 ? ((totalObtained / totalMaximum) * 100) : 0;
-      pdf.setFontSize(18);
+      // Score
+      const scoreText = `${totalObtained.toFixed(1)} / ${totalMaximum.toFixed(1)}`;
+      pdf.setFontSize(16);
       
+      const percentage = totalMaximum > 0 ? ((totalObtained / totalMaximum) * 100) : 0;
       if (percentage >= 90) pdf.setTextColor(successBlue[0], successBlue[1], successBlue[2]);
       else if (percentage >= 70) pdf.setTextColor(warningBlue[0], warningBlue[1], warningBlue[2]);
-      else pdf.setTextColor(pucpNavyBlue[0], pucpNavyBlue[1], pucpNavyBlue[2]); // Azul marino para bajo rendimiento
+      else pdf.setTextColor(pucpNavyBlue[0], pucpNavyBlue[1], pucpNavyBlue[2]);
       
-      pdf.text(`${percentage.toFixed(1)}%`, pageWidth - margin - 40, boxY + 18);
+      pdf.text(scoreText, boxX + boxWidth - 10, boxY + 14.5, { align: 'right' });
 
-      // Etiquetas descriptivas elegantes
-      pdf.setFontSize(8);
+      // Texto de agradecimiento del otro lado
+      pdf.setFontSize(10);
       pdf.setTextColor(mediumGray[0], mediumGray[1], mediumGray[2]);
-      pdf.setFont('helvetica', 'normal');
-      pdf.text('PUNTAJE TOTAL OBTENIDO', margin + 30, boxY + 24);
-      pdf.text('PORCENTAJE DE LOGRO', pageWidth - margin - 40, boxY + 24);
-      
-      // Barra de progreso ultra moderna
-      const progressBarY = boxY + 27;
-      const progressWidth = usableWidth * 0.75;
-      const progressX = margin + (usableWidth - progressWidth) / 2;
-      
-      // Fondo de la barra con sombra
-      pdf.setFillColor(220, 220, 220);
-      pdf.rect(progressX + 1, progressBarY + 1, progressWidth, 3, 'F');
-      pdf.setFillColor(240, 240, 240);
-      pdf.rect(progressX, progressBarY, progressWidth, 3, 'F');
-      
-      // Progreso actual con azules
-      const progressFill = (progressWidth * percentage) / 100;
-      if (percentage >= 90) pdf.setFillColor(successBlue[0], successBlue[1], successBlue[2]);
-      else if (percentage >= 70) pdf.setFillColor(warningBlue[0], warningBlue[1], warningBlue[2]);
-      else pdf.setFillColor(pucpNavyBlue[0], pucpNavyBlue[1], pucpNavyBlue[2]);
-      
-      pdf.rect(progressX, progressBarY, progressFill, 3, 'F');
+      pdf.setFont('helvetica', 'italic');
+      pdf.text('                                       ', margin + 5, boxY + 14);
 
-      // Footer ultra elegante con azules
-      const addFooter = () => {
-        // Línea decorativa azul elegante
-        pdf.setDrawColor(pucpBlue[0], pucpBlue[1], pucpBlue[2]);
-        pdf.setLineWidth(1.2);
-        pdf.line(margin, pageHeight - 25, pageWidth - margin, pageHeight - 25);
-        
-        // Línea más fina debajo para elegancia
-        pdf.setDrawColor(pucpSkyBlue[0], pucpSkyBlue[1], pucpSkyBlue[2]);
-        pdf.setLineWidth(0.3);
-        pdf.line(margin, pageHeight - 24, pageWidth - margin, pageHeight - 24);
-        
-        pdf.setFontSize(8);
-        pdf.setTextColor(mediumGray[0], mediumGray[1], mediumGray[2]);
-        pdf.setFont('helvetica', 'normal');
-        
-        // Información institucional con mejor formato
-        pdf.setFont('helvetica', 'bold');
-        pdf.text('PUCP', margin, pageHeight - 18);
-        pdf.setFont('helvetica', 'normal');
-        pdf.text(`${reviewer.email || 'evaluacion@pucp.edu.pe'}`, margin, pageHeight - 14);
-        
-        // Información del documento con mejor alineación
-        pdf.text(`${student.code} - ${course} - Lab ${labNumber}`, pageWidth - margin, pageHeight - 18, { align: 'right' });
-        pdf.text(`${new Date().toLocaleString('es-ES')}`, pageWidth - margin, pageHeight - 14, { align: 'right' });
-        
-        // Número de página centrado con estilo
-        pdf.setFontSize(9);
-        pdf.setTextColor(pucpBlue[0], pucpBlue[1], pucpBlue[2]);
-        pdf.setFont('helvetica', 'bold');
-        pdf.text('Página 1', pageWidth / 2, pageHeight - 10, { align: 'center' });
+      // Función para agregar footer elegante con múltiples páginas
+      const addFooters = () => {
+        const pageCount = pdf.getNumberOfPages();
+        for (let i = 1; i <= pageCount; i++) {
+          pdf.setPage(i);
+          
+          // Línea decorativa azul elegante
+          pdf.setDrawColor(pucpBlue[0], pucpBlue[1], pucpBlue[2]);
+          pdf.setLineWidth(1.2);
+          pdf.line(margin, pageHeight - 20, pageWidth - margin, pageHeight - 20);
+          
+          // Línea más fina debajo para elegancia
+          pdf.setDrawColor(pucpSkyBlue[0], pucpSkyBlue[1], pucpSkyBlue[2]);
+          pdf.setLineWidth(0.3);
+          pdf.line(margin, pageHeight - 19, pageWidth - margin, pageHeight - 19);
+          
+          pdf.setFontSize(8);
+          pdf.setTextColor(mediumGray[0], mediumGray[1], mediumGray[2]);
+          
+          // Información institucional con mejor formato
+          pdf.setFont('helvetica', 'bold');
+          pdf.text('PUCP', margin, pageHeight - 13);
+          pdf.setFont('helvetica', 'normal');
+          pdf.text(`${reviewer.email || 'evaluacion@pucp.edu.pe'}`, margin, pageHeight - 9);
+          
+          // Información del documento con mejor alineación
+          pdf.text(`${student.code || 'N/A'} - ${course || 'Curso'} - Lab ${labNumber || 'N/A'}`, pageWidth - margin, pageHeight - 13, { align: 'right' });
+          pdf.text(`${new Date().toLocaleDateString('es-ES')}`, pageWidth - margin, pageHeight - 9, { align: 'right' });
+          
+          // Número de página centrado con estilo
+          pdf.setFontSize(9);
+          pdf.setTextColor(pucpBlue[0], pucpBlue[1], pucpBlue[2]);
+          pdf.setFont('helvetica', 'bold');
+          pdf.text(`Página ${i} de ${pageCount}`, pageWidth / 2, pageHeight - 11, { align: 'center' });
+        }
       };
 
-      addFooter();
+      addFooters();
 
       const filename = `Retroalimentacion_${student.name || 'Estudiante'}_Lab${labNumber}_${new Date().toISOString().split('T')[0]}.pdf`;
       pdf.save(filename);
@@ -659,7 +668,31 @@ export default function FeedbackPage() {
           
           {/* Información del estudiante - más clara */}
           <div className="relative z-10 px-8 py-6 border-b" style={{ backgroundColor: '#f8fafc', borderColor: '#e2e8f0' }}>
-            <h2 className="text-lg font-bold mb-6" style={{ color: '#1f2937' }}>INFORMACIÓN DEL ESTUDIANTE</h2>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-bold" style={{ color: '#1f2937' }}>INFORMACIÓN DEL ESTUDIANTE</h2>
+              <div className="w-1/2">
+                <select 
+                  className="w-full px-3 py-2 border rounded-md text-sm font-semibold cursor-pointer"
+                  style={{ backgroundColor: '#ffffff', borderColor: '#2563eb', color: '#1e40af' }}
+                  onChange={(e) => {
+                    const selectedCode = e.target.value;
+                    const student = STUDENT_LIST.find(s => s.code === selectedCode);
+                    if (student) {
+                      const [lastname, name] = student.fullname.split(', ');
+                      setStudent({ code: student.code, name: name || "", lastname: lastname || "" });
+                    } else {
+                      setStudent({ code: "", name: "", lastname: "" });
+                    }
+                  }}
+                  defaultValue=""
+                >
+                  <option value="" disabled>Seleccione un Alumno (Opcional)</option>
+                  {STUDENT_LIST.map((s) => (
+                    <option key={s.code} value={s.code}>{s.code} - {s.fullname}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
             
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
               <div>
