@@ -30,15 +30,15 @@ export default function FeedbackPage() {
   ]);
 
   const STUDENT_LIST = [
-    { code: "20220343", fullname: "CULQUI TRUJILLO, NEILL ROBERT" },
-    { code: "20220625", fullname: "UNDA VIVANCO, ADRIAN ANDRE" },
-    { code: "20221277", fullname: "ALVAREZ ROSAS, BELEN LUCIA" },
-    { code: "20221402", fullname: "CHECA MEZA, GABRIELA LUCIA" },
-    { code: "20221762", fullname: "ALANIA NOVOA, ARIAN ALFONSO" },
-    { code: "20222299", fullname: "JANAMPA FLORES, DAFNE YANOA" },
-    { code: "20222626", fullname: "MOYA ESTRADA, HECTOR ISMAEL" },
-    { code: "20222757", fullname: "LLAIQUI ROJAS, ARIEL JAIR" }
-  ];
+    { code: "20231448", fullname: "ANDRADE REYES, JOSEPH WALTHER" },
+    { code: "20231439", fullname: "ORIHUELA MONTERO, FABIAN ANDRES" },
+    { code: "20232142", fullname: "VENTURA SOSA, SERGIO LUIS" },
+    { code: "20230896", fullname: "FELIX SALINAS, LEONARDO JESUS" },
+    { code: "20230800", fullname: "PAREDES ALARCÓN, FRANK ALBERT" },
+    { code: "20231108", fullname: "MENENDEZ ZUÑIGA, MARIANO ANDRE" },
+    { code: "20232273", fullname: "ROSALES ARTEAGA, JOHN MICHEL" },
+    { code: "20230683", fullname: "VENTURA LLANOS, DONNA ANGIE" }
+];
 
   const handleLogout = () => {
     logout();
